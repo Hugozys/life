@@ -11,7 +11,7 @@ public:
   }
 };
 class NoOptions: public std::exception{};
-
+class NoColor: public std::exception{};
 
 
 #endif

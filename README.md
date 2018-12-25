@@ -7,6 +7,13 @@ When running the life simulator with --help or -h option, it will show this help
 All other usages will be incorrect
 
 
+Welcome to Conway's Game of Life Simulator
+ 	   	    	    --Powered by Ncurses
+
+			    Random Configuration
+			    Craft Your Own
+			    Exit
+
 
 
 

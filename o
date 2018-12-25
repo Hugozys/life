@@ -1,0 +1,85 @@
+In file included from /usr/include/c++/7/vector:62:0,
+                 from /usr/include/glog/logging.h:49,
+                 from board.cc:1:
+/usr/include/c++/7/bits/stl_construct.h: In instantiation of ‘void std::_Construct(_T1*, _Args&& ...) [with _T1 = std::unique_ptr<tagITEM, int (*)(tagITEM*)>; _Args = {}]’:
+/usr/include/c++/7/bits/stl_uninitialized.h:527:18:   required from ‘static _ForwardIterator std::__uninitialized_default_n_1<_TrivialValueType>::__uninit_default_n(_ForwardIterator, _Size) [with _ForwardIterator = std::unique_ptr<tagITEM, int (*)(tagITEM*)>*; _Size = long unsigned int; bool _TrivialValueType = false]’
+/usr/include/c++/7/bits/stl_uninitialized.h:583:20:   required from ‘_ForwardIterator std::__uninitialized_default_n(_ForwardIterator, _Size) [with _ForwardIterator = std::unique_ptr<tagITEM, int (*)(tagITEM*)>*; _Size = long unsigned int]’
+/usr/include/c++/7/bits/stl_uninitialized.h:645:44:   required from ‘_ForwardIterator std::__uninitialized_default_n_a(_ForwardIterator, _Size, std::allocator<_Tp>&) [with _ForwardIterator = std::unique_ptr<tagITEM, int (*)(tagITEM*)>*; _Size = long unsigned int; _Tp = std::unique_ptr<tagITEM, int (*)(tagITEM*)>]’
+/usr/include/c++/7/bits/stl_vector.h:1347:36:   required from ‘void std::vector<_Tp, _Alloc>::_M_default_initialize(std::vector<_Tp, _Alloc>::size_type) [with _Tp = std::unique_ptr<tagITEM, int (*)(tagITEM*)>; _Alloc = std::allocator<std::unique_ptr<tagITEM, int (*)(tagITEM*)> >; std::vector<_Tp, _Alloc>::size_type = long unsigned int]’
+/usr/include/c++/7/bits/stl_vector.h:285:30:   required from ‘std::vector<_Tp, _Alloc>::vector(std::vector<_Tp, _Alloc>::size_type, const allocator_type&) [with _Tp = std::unique_ptr<tagITEM, int (*)(tagITEM*)>; _Alloc = std::allocator<std::unique_ptr<tagITEM, int (*)(tagITEM*)> >; std::vector<_Tp, _Alloc>::size_type = long unsigned int; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<std::unique_ptr<tagITEM, int (*)(tagITEM*)> >]’
+menu.hpp:13:96:   required from here
+/usr/include/c++/7/bits/stl_construct.h:75:7: error: no matching function for call to ‘std::unique_ptr<tagITEM, int (*)(tagITEM*)>::unique_ptr()’
+     { ::new(static_cast<void*>(__p)) _T1(std::forward<_Args>(__args)...); }
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/memory:80:0,
+                 from board.hpp:6,
+                 from board.cc:2:
+/usr/include/c++/7/bits/unique_ptr.h:260:2: note: candidate: template<class _Up, class> std::unique_ptr<_Tp, _Dp>::unique_ptr(std::auto_ptr<_Up>&&)
+  unique_ptr(auto_ptr<_Up>&& __u) noexcept;
+  ^~~~~~~~~~
+/usr/include/c++/7/bits/unique_ptr.h:260:2: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/7/vector:62:0,
+                 from /usr/include/glog/logging.h:49,
+                 from board.cc:1:
+/usr/include/c++/7/bits/stl_construct.h:75:7: note:   candidate expects 1 argument, 0 provided
+     { ::new(static_cast<void*>(__p)) _T1(std::forward<_Args>(__args)...); }
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/memory:80:0,
+                 from board.hpp:6,
+                 from board.cc:2:
+/usr/include/c++/7/bits/unique_ptr.h:252:2: note: candidate: template<class _Up, class _Ep, class> std::unique_ptr<_Tp, _Dp>::unique_ptr(std::unique_ptr<_Up, _Ep>&&)
+  unique_ptr(unique_ptr<_Up, _Ep>&& __u) noexcept
+  ^~~~~~~~~~
+/usr/include/c++/7/bits/unique_ptr.h:252:2: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/7/vector:62:0,
+                 from /usr/include/glog/logging.h:49,
+                 from board.cc:1:
+/usr/include/c++/7/bits/stl_construct.h:75:7: note:   candidate expects 1 argument, 0 provided
+     { ::new(static_cast<void*>(__p)) _T1(std::forward<_Args>(__args)...); }
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/memory:80:0,
+                 from board.hpp:6,
+                 from board.cc:2:
+/usr/include/c++/7/bits/unique_ptr.h:238:7: note: candidate: std::unique_ptr<_Tp, _Dp>::unique_ptr(std::unique_ptr<_Tp, _Dp>&&) [with _Tp = tagITEM; _Dp = int (*)(tagITEM*)]
+       unique_ptr(unique_ptr&& __u) noexcept
+       ^~~~~~~~~~
+/usr/include/c++/7/bits/unique_ptr.h:238:7: note:   candidate expects 1 argument, 0 provided
+/usr/include/c++/7/bits/unique_ptr.h:233:12: note: candidate: template<class _Up, class> constexpr std::unique_ptr<_Tp, _Dp>::unique_ptr(std::nullptr_t)
+  constexpr unique_ptr(nullptr_t) noexcept : unique_ptr() { }
+            ^~~~~~~~~~
+/usr/include/c++/7/bits/unique_ptr.h:233:12: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/7/vector:62:0,
+                 from /usr/include/glog/logging.h:49,
+                 from board.cc:1:
+/usr/include/c++/7/bits/stl_construct.h:75:7: note:   candidate expects 1 argument, 0 provided
+     { ::new(static_cast<void*>(__p)) _T1(std::forward<_Args>(__args)...); }
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/memory:80:0,
+                 from board.hpp:6,
+                 from board.cc:2:
+/usr/include/c++/7/bits/unique_ptr.h:224:7: note: candidate: std::unique_ptr<_Tp, _Dp>::unique_ptr(std::unique_ptr<_Tp, _Dp>::pointer, typename std::remove_reference<_To>::type&&) [with _Tp = tagITEM; _Dp = int (*)(tagITEM*); std::unique_ptr<_Tp, _Dp>::pointer = tagITEM*; typename std::remove_reference<_To>::type = int (*)(tagITEM*)]
+       unique_ptr(pointer __p,
+       ^~~~~~~~~~
+/usr/include/c++/7/bits/unique_ptr.h:224:7: note:   candidate expects 2 arguments, 0 provided
+/usr/include/c++/7/bits/unique_ptr.h:212:7: note: candidate: std::unique_ptr<_Tp, _Dp>::unique_ptr(std::unique_ptr<_Tp, _Dp>::pointer, typename std::conditional<std::is_reference<_Dp>::value, _Dp, const _Dp&>::type) [with _Tp = tagITEM; _Dp = int (*)(tagITEM*); std::unique_ptr<_Tp, _Dp>::pointer = tagITEM*; typename std::conditional<std::is_reference<_Dp>::value, _Dp, const _Dp&>::type = int (* const&)(tagITEM*)]
+       unique_ptr(pointer __p,
+       ^~~~~~~~~~
+/usr/include/c++/7/bits/unique_ptr.h:212:7: note:   candidate expects 2 arguments, 0 provided
+/usr/include/c++/7/bits/unique_ptr.h:201:2: note: candidate: template<class _Up, class> std::unique_ptr<_Tp, _Dp>::unique_ptr(std::unique_ptr<_Tp, _Dp>::pointer)
+  unique_ptr(pointer __p) noexcept
+  ^~~~~~~~~~
+/usr/include/c++/7/bits/unique_ptr.h:201:2: note:   template argument deduction/substitution failed:
+In file included from /usr/include/c++/7/vector:62:0,
+                 from /usr/include/glog/logging.h:49,
+                 from board.cc:1:
+/usr/include/c++/7/bits/stl_construct.h:75:7: note:   candidate expects 1 argument, 0 provided
+     { ::new(static_cast<void*>(__p)) _T1(std::forward<_Args>(__args)...); }
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /usr/include/c++/7/memory:80:0,
+                 from board.hpp:6,
+                 from board.cc:2:
+/usr/include/c++/7/bits/unique_ptr.h:188:12: note: candidate: template<class _Up, class> constexpr std::unique_ptr<_Tp, _Dp>::unique_ptr()
+  constexpr unique_ptr() noexcept
+            ^~~~~~~~~~
+/usr/include/c++/7/bits/unique_ptr.h:188:12: note:   template argument deduction/substitution failed:
+make: *** [board.o] Error 1

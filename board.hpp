@@ -4,27 +4,35 @@
 #define HEIGHT 2
 #include <vector>
 #include <memory>
-#include "cell.hpp"
 #include <ncurses.h>
+#include <cstdlib>
+#include "menu.hpp"
 using std::vector;
 
 class Board{
-  class Cell{
-  public:
-    Cell(int y, int x):p_win_(newwin(HEIGHT,WIDTH,y,x)),alive_(false){}
-    Cell()=default;
-  private:
-    std::unique_ptr<WINDOW> p_win_;
-    bool alive_;
-  };
-  void InitWindows();
+  bool CellLiveOrDead(int dead_num, int live_num, bool status);
+  bool GetCellNewStatus(int my_i, int my_j);
+  void Fill();
+  void DrawCell(int y, int x);
+  void ShowMenu();
 public:
-  void RunSimulate();
+  void SetEnv();
+  void InitCells();
+  void InitColor();
+  void Calculate();
+  void Update();
+  
+public:
+  Board():menu(){}
+  void Run();
   
 private:
-  vector<vector<Cell>> layout_;
-  int width_;
-  int height_;
+  vector<vector<bool>> prev;
+  vector<vector<bool>> now;
+  Menu menu;
+  bool is_over_;
+  int max_y_;
+  int max_x_;
 };
 
 #endif

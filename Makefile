@@ -3,18 +3,20 @@ CXXFLAGS = -std=gnu++11 -Wall -Werror -pedantic
 DFLAGS = -MMD
 CC = g++
 DEBUG = -ggdb3
+TUI = -DTUI
+LIBS = -lncurses -lmenu -lglog
 SRCS = $(wildcard *.cc)
 OBJS = $(patsubst %.cc, %.o, $(SRCS))
 
 life: $(OBJS)
-	$(CC) $^ -o $@
+	$(CC)  $^ -o $@ $(LIBS)
 
 %.o: %.cc
-	$(CC) $(CXXFLAGS)  -c $< $(DFLAGS) -o $@
+	$(CC) $(CXXFLAGS) $(DEBUG) $(TUI)  -c $< $(DFLAGS) -o $@
 
 
 
 -include *.d
 
 clean:
-	rm -f *~ life *.o *.d
+	rm -f *~ life *.o *.d log*
