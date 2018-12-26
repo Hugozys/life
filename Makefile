@@ -2,8 +2,8 @@
 CXXFLAGS = -std=gnu++11 -Wall -Werror -pedantic
 DFLAGS = -MMD
 CC = g++
-DEBUG = -ggdb3
-TUI = -DTUI
+#DEBUG = -ggdb3
+#TUI = -DTUI
 LIBS = -lncurses -lmenu -lglog
 SRCS = $(wildcard *.cc)
 OBJS = $(patsubst %.cc, %.o, $(SRCS))

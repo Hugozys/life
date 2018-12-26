@@ -1,12 +1,11 @@
 #ifndef _BOARD__HPP
 #define _BOARD__HPP
-#define WIDTH  1
-#define HEIGHT 2
 #include <vector>
 #include <memory>
 #include <ncurses.h>
 #include <cstdlib>
 #include "menu.hpp"
+#include "help.hpp"
 using std::vector;
 
 class Board{
@@ -15,6 +14,7 @@ class Board{
   void Fill(bool manual);
   void DrawCell(int y, int x);
   void GoToMenu();
+  void GoToHelp();
   void GoToSim(bool manual);
   void OnEvent(bool manual);
   void EventDriven();
@@ -22,6 +22,7 @@ class Board{
   void ManualConfig();
   void Pause();
   void PollInput();
+  
 public:
   void SetEnv();
   void InitCells(bool manual);
@@ -37,10 +38,11 @@ public:
   void Run();
   
 private:
-  enum STAT{MENU,SIM_CRAFT,SIM_RANDOM};
+  enum STAT{MENU,SIM_CRAFT,SIM_RANDOM,HELP};
   vector<vector<bool>> prev_;
   vector<vector<bool>> now_;
   Menu menu_;
+  Help help_;
   bool restart_;
   int max_y_;
   int max_x_;

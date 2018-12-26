@@ -15,6 +15,6 @@ class NoColor: public std::exception{};
 class Quit: public std::exception{};
 class Craft: public std::exception{};
 class Random: public std::exception{};
-class Help: public std::exception{};
+class GoHelp: public std::exception{};
 class GoMenu: public std::exception{};
 #endif

@@ -27,7 +27,7 @@ void Board::Fill(bool manual){
   if(!manual){
     for (int i = 0; i <= max_y_; ++i){
       for (int j = 0; j <= max_x_; ++j){      
-	if (rand() % 10 == 0) prev_[i][j] = true;
+	if (rand() % 2 == 0) prev_[i][j] = true;
       }
     }
   }
@@ -75,7 +75,9 @@ bool Board::GetCellNewStatus(int my_i, int my_j){
 }
 
 void Board::Calculate(){
+#ifdef LOGGER
   LOG(INFO)<<"Calculate Next Evolution...";
+#endif
   for (int i = 0; i <= max_y_; ++i){
     for (int j = 0; j <= max_x_; ++j){
       now_[i][j] = GetCellNewStatus(i,j);
@@ -129,8 +131,10 @@ void Board::ManualConfig(){
       break;
     case 10:
       return;
-    case 'q':
+    case 'b':
       throw GoMenu();
+    case 'q':
+      throw Quit();
     default:
       break;
     }
@@ -178,6 +182,7 @@ void Board::ContSim(){
   while(true){
     Calculate();
     Update();
+    sleep(0.5);
     PollInput();
   }
 }
@@ -201,10 +206,31 @@ void Board::GoToSim(bool manual){
   OnEvent(manual);  
 }
 
+void Board::GoToHelp(){
+  int ch;
+  menu_.Hide();
+  clear();
+  refresh();
+  help_.Show();
+  while(true){
+    ch = getch();
+    switch(ch){
+    case 'q':
+      throw Quit();
+    case 'b':
+      throw GoMenu();
+    default:
+      break;
+    }
+  }
+}  
 void Board::EventDriven(){
   switch(cur_stat_){
   case MENU:
     GoToMenu();
+    break;
+  case HELP:
+    GoToHelp();
     break;
   case SIM_CRAFT:
     GoToSim(true);
@@ -216,7 +242,9 @@ void Board::EventDriven(){
 }
 
 void Board::Run(){
+#ifdef LOGGER
   LOG(INFO)<<"Start running...";
+#endif
   menu_.CreateNewWindow();
   while (true){
     try{
@@ -230,6 +258,9 @@ void Board::Run(){
     }
     catch (const GoMenu & e){
       cur_stat_ = MENU;
+    }
+    catch (const GoHelp & e){
+      cur_stat_ = HELP;
     }
     catch (const Quit & e){
       break;

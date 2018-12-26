@@ -1,7 +1,18 @@
 #include <getopt.h>
 #include "parser.hpp"
 #include "exception.hpp"
-
+#include <iomanip>
+void Parser::PrintHelpMessage(){
+  std::cout<<"Usage:\n";
+  std::cout<<"\t"<<"./life\n";
+  std::cout<<"Option:\n";
+  std::cout<<"\t"<<std::left<<std::setw(30)<<"-h/--help"<<"show this help message"<<std::endl;
+  std::cout<<"Command:\n";
+  std::cout<<"\t"<<std::left<<std::setw(30)<<"b"<<"back to menu"<<std::endl;
+  std::cout<<"\t"<<std::left<<std::setw(30)<<"q"<<"quit the game"<<std::endl;
+  std::cout<<"\t"<<std::left<<std::setw(30)<<"p"<<"pause simulation(press p again to resume)"<<std::endl;
+}
+  
 void Parser::ReadOptions(int argc, char ** argv){
   const char * OPTSTR = "h";
   option LONGOPTS[] = {
@@ -29,5 +40,4 @@ void Parser::ReadOptions(int argc, char ** argv){
       
     }
   }
-  //throw NoOptions();
 }

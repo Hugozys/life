@@ -1,18 +1,12 @@
-The life simulator can be run in the following two options:
-    -./life 
-    -./life --help or -h
-The first input format tells the life simulator to run game of life simulation
-When running the life simulator with --help or -h option, it will show this help message
+# Conway's Game of Life Simulator
+Classic game of life.
 
-All other usages will be incorrect
+FYI: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
+# How To Run
+To run the program, type `make`. Then run the executable `./life`
 
-Welcome to Conway's Game of Life Simulator
- 	   	    	    --Powered by Ncurses
-
-			    Random Configuration
-			    Craft Your Own
-			    Exit
+You could also enter `./life --help or -h` to see the help message
 
 
 

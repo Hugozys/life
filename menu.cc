@@ -11,7 +11,9 @@ void Menu::CreateNewWindow(){
 
 void Menu::UserInteract(){
   int c = wgetch(menu_win_.get());
+#ifdef LOGGER
   LOG(INFO)<<"User press: "<<c;
+#endif
   switch(c){
   case KEY_DOWN:
     menu_driver(menu_.get(), REQ_DOWN_ITEM);
@@ -29,7 +31,7 @@ void Menu::UserInteract(){
 	throw Craft();
       }
       else if (curr == p_chs_[2]){
-	throw Help();
+	throw GoHelp();
       }
       else if(curr == p_chs_[3]){
 	throw Quit();

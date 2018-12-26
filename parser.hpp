@@ -4,7 +4,7 @@
 class Parser{
 public:
   Parser()=default;
-  void PrintHelpMessage(){  std::cout<<"Welcome to a simple game of life simulator"<<std::endl;}
+  void PrintHelpMessage();
   void ReadOptions(int argc, char ** argv);
 };
 
