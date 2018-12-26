@@ -23,12 +23,12 @@ int main(int argc, char ** argv){
   Board bd;
   try{
     bd.SetEnv();
+    bd.Run();
   }
   catch (const NoColor & e){
     std::cout<<"Your terminal doesn't support color.\n"<<std::endl;
-    return (EXIT_SUCCESS);
   }
-  bd.Run();
-  endwin();
+  catch (const Quit & e){  
+  }
   return (EXIT_SUCCESS);
 }

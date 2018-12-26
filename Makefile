@@ -19,4 +19,4 @@ life: $(OBJS)
 -include *.d
 
 clean:
-	rm -f *~ life *.o *.d log*
+	rm -f *~ life *.o *.d log* UNKNOWN.INFO

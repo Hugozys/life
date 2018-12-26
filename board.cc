@@ -13,25 +13,27 @@ void Board::InitColor(){
 }
 
 void Board::DrawCell(int y, int x){
-  if(prev[y][x]){
-    mvaddch(y,x, ACS_DIAMOND);
+  if(prev_[y][x]){
+    mvaddch(y,x, ACS_BLOCK);
   }
   else{
     mvaddch(y,x, ' ');
   }
 }
 
-void Board::Fill(){
+void Board::Fill(bool manual){
   srand(time(NULL));
-  prev = now = vector<vector<bool>>(max_y_+1, vector<bool>(max_x_+1,false));
-  for (int i = 0; i <= max_y_; ++i){
-    for (int j = 0; j <= max_x_; ++j){      
-      if (rand() % 10 == 0) prev[i][j] = true;
+  prev_ = now_ = vector<vector<bool>>(max_y_+1, vector<bool>(max_x_+1,false));
+  if(!manual){
+    for (int i = 0; i <= max_y_; ++i){
+      for (int j = 0; j <= max_x_; ++j){      
+	if (rand() % 10 == 0) prev_[i][j] = true;
+      }
     }
   }
 }
-void Board::InitCells(){
-  Fill();
+void Board::InitCells(bool manual){
+  Fill(manual);
   for (int i = 0; i <= max_y_; ++i){
     for (int j = 0; j <= max_x_; ++j){      
       DrawCell(i,j);
@@ -62,21 +64,21 @@ bool Board::GetCellNewStatus(int my_i, int my_j){
   for (int i = 0; i < 8; ++i){
     int n_i = (my_i + neighs[i][0] + r_sz) % r_sz;
     int n_j = (my_j + neighs[i][1] + c_sz) % c_sz;
-    if (prev[n_i][n_j]){
+    if (prev_[n_i][n_j]){
       ++live_num;
     }
     else{
       ++dead_num;
     }
   }
-  return CellLiveOrDead(dead_num,live_num,prev[my_i][my_j]);
+  return CellLiveOrDead(dead_num,live_num,prev_[my_i][my_j]);
 }
 
 void Board::Calculate(){
   LOG(INFO)<<"Calculate Next Evolution...";
   for (int i = 0; i <= max_y_; ++i){
     for (int j = 0; j <= max_x_; ++j){
-      now[i][j] = GetCellNewStatus(i,j);
+      now_[i][j] = GetCellNewStatus(i,j);
     }
   }
 }
@@ -84,7 +86,7 @@ void Board::Calculate(){
 void Board::Update(){
   for (int i = 0; i <= max_y_; ++i){
     for (int j = 0; j <= max_x_; ++j){
-      prev[i][j] = now[i][j];
+      prev_[i][j] = now_[i][j];
       DrawCell(i,j);
     }
   }
@@ -96,37 +98,104 @@ void Board::SetEnv(){
   curs_set(0);
   getmaxyx(stdscr,max_y_,max_x_);
   if (has_colors() == FALSE){
-    //endwin();
-    //throw NoColor();
+    throw NoColor();
   }
   cbreak();
   keypad(stdscr,TRUE);
   noecho();
   refresh();
+  mousemask(BUTTON1_CLICKED,NULL);
 }
 
+
+void Board::GoToMenu(){
+  clear();
+  menu_.Show();
+  while(true){
+    menu_.UserInteract();
+  } 
+}
+
+void Board::ManualConfig(){
+  while(true){
+    int ch = getch();
+    switch(ch){
+    case KEY_MOUSE:
+      if(getmouse(&event_) == OK && (event_.bstate & BUTTON1_CLICKED)){
+	prev_[event_.y][event_.x] = !prev_[event_.y][event_.x];
+	DrawCell(event_.y,event_.x);
+	refresh();
+      }
+      break;
+    case 10:
+      return;
+    case 'q':
+      throw GoMenu();
+    default:
+      break;
+    }
+  }
+}
+
+void Board::ContSim(){
+  while(true){
+    Calculate();
+    Update();
+    sleep(0.8);
+  }
+  
+}
+void Board::OnEvent(bool manual){
+  InitCells(manual);
+  if (manual){
+    ManualConfig();
+  }
+  ContSim();
+}
+
+void Board::GoToSim(bool manual){
+  if (restart_){
+    restart_ = false;
+    menu_.Hide();
+    InitColor();
+    clear();
+    refresh();
+  }
+  OnEvent(manual);  
+}
+
+void Board::EventDriven(){
+  switch(cur_stat_){
+  case MENU:
+    GoToMenu();
+    break;
+  case SIM_CRAFT:
+    GoToSim(true);
+    break;
+  case SIM_RANDOM:
+    GoToSim(false);
+    break;
+  }
+}
 
 void Board::Run(){
   LOG(INFO)<<"Start running...";
-  menu.CreateNewWindow();
-  menu.Show();
-  getch();
-  menu.Hide();
-  getch();
-  menu.Show();
-  getch();
-  InitColor();
-  InitCells();
-  refresh();
-  
-  /*
-  while (!is_over_){
-    LOG(INFO)<<"Simulate hasn't been over..";
-    Calculate();
-    Update();
-    int itpt = getch();
+  menu_.CreateNewWindow();
+  while (true){
+    try{
+      EventDriven();
+    }
+    catch(const Random & e){
+      cur_stat_ = SIM_RANDOM;
+    }
+    catch(const Craft & e){
+      cur_stat_ = SIM_CRAFT;
+    }
+    catch (const GoMenu & e){
+      cur_stat_ = MENU;
+    }
+    catch (const Quit & e){
+      break;
+    }
   }
-  */
 }
-
-//#endif
