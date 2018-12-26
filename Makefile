@@ -9,7 +9,7 @@ SRCS = $(wildcard *.cc)
 OBJS = $(patsubst %.cc, %.o, $(SRCS))
 
 life: $(OBJS)
-	$(CC)  $^ -o $@ $(LIBS)
+	$(CC) $^ -o $@ $(LIBS)
 
 %.o: %.cc
 	$(CC) $(CXXFLAGS) $(DEBUG) $(TUI)  -c $< $(DFLAGS) -o $@
