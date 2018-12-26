@@ -20,6 +20,8 @@ class Board{
   void EventDriven();
   void ContSim();
   void ManualConfig();
+  void Pause();
+  void PollInput();
 public:
   void SetEnv();
   void InitCells(bool manual);

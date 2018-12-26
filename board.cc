@@ -137,14 +137,51 @@ void Board::ManualConfig(){
   }
 }
 
+
+void Board::Pause(){
+  timeout(-1);
+  int ch;
+  while(true){
+    ch = getch();
+    switch(ch){
+    case 'p':
+      return;
+    case 'b':
+      throw GoMenu();
+    case 'q':
+      throw Quit();
+    default:
+      break;
+    }
+  }
+}
+
+void Board::PollInput(){
+  int ch;
+  ch = getch();
+  switch(ch){
+  case 'p':
+    Pause();
+    timeout(0);
+    break;
+  case 'b':
+    timeout(-1);
+    throw GoMenu();
+  case 'q':
+    throw Quit();
+  default:
+    break;
+  }
+}
 void Board::ContSim(){
+  timeout(0);
   while(true){
     Calculate();
     Update();
-    sleep(0.8);
+    PollInput();
   }
-  
 }
+
 void Board::OnEvent(bool manual){
   InitCells(manual);
   if (manual){
