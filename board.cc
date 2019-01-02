@@ -153,11 +153,13 @@ void Board::ManualConfig(){
 
 
 void Board::Pause(){
+  LOG(INFO)<<"Enter Pause!";
   int ch;
   while(true){
     ch = wgetch(window_.get());
     switch(ch){
     case 'p':
+      LOG(INFO)<<"Resume Indicator!";
       return;
     case 'b':
       throw GoMenu();
@@ -174,11 +176,11 @@ void Board::PollInput(){
   ch = wgetch(window_.get());
   switch(ch){
   case 'p':
-    nocbreak();
+    cbreak();
     Pause();
     break;
   case 'b':
-    nocbreak();
+    cbreak();
     throw GoMenu();
   case 'q':
     throw Quit();

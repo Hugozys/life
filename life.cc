@@ -5,8 +5,8 @@
 #include "board.hpp"
 
 int main(int argc, char ** argv){
-  google::SetLogDestination(google::GLOG_INFO,"./log" );
-  google::InitGoogleLogging(argv[0]);
+  //google::SetLogDestination(google::GLOG_INFO,"./log" );
+  //google::InitGoogleLogging(argv[0]);
   Parser ps;
   try{
     ps.ReadOptions(argc,argv);
