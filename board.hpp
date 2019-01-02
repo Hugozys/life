@@ -31,7 +31,7 @@ public:
   void Update();
   
 public:
-  Board():restart_(true),cur_stat_(MENU){}
+  Board():restart_(true),cur_stat_(MENU),window_(nullptr, &delwin){}
   ~Board(){
     endwin();
   }
@@ -44,11 +44,13 @@ private:
   Menu menu_;
   Help help_;
   bool restart_;
-  int max_y_;
-  int max_x_;
+  //int max_y_;
+  //int max_x_;
+  int min_y_;
+  int min_x_;
   MEVENT event_;
   STAT cur_stat_;
-  
+  std::unique_ptr<WINDOW, decltype(&delwin)> window_;
 };
 
 #endif

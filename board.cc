@@ -14,31 +14,34 @@ void Board::InitColor(){
 
 void Board::DrawCell(int y, int x){
   if(prev_[y][x]){
-    mvaddch(y,x, ACS_BLOCK);
+    mvwaddch(window_.get(),y+1,x+1, ' ' | A_REVERSE);
   }
   else{
-    mvaddch(y,x, ' ');
+    mvwaddch(window_.get(),y+1,x+1, ' ');
   }
 }
 
 void Board::Fill(bool manual){
   srand(time(NULL));
-  prev_ = now_ = vector<vector<bool>>(max_y_+1, vector<bool>(max_x_+1,false));
+  //LOG(INFO)<<"max_y_: "<<max_y_<<"max_y_:"<<min_y_;
+  prev_ = now_ = vector<vector<bool>>(LINES - 2 - 2, vector<bool>(COLS - 4 - 2,false));
   if(!manual){
-    for (int i = 0; i <= max_y_; ++i){
-      for (int j = 0; j <= max_x_; ++j){      
-	if (rand() % 2 == 0) prev_[i][j] = true;
+    for (size_t i = 0; i < prev_.size(); ++i){
+      for (size_t j = 0; j < prev_[0].size(); ++j){      
+	if (rand() % 5 == 0) prev_[i][j] = true;
       }
     }
   }
 }
+
 void Board::InitCells(bool manual){
   Fill(manual);
-  for (int i = 0; i <= max_y_; ++i){
-    for (int j = 0; j <= max_x_; ++j){      
+  for (size_t i = 0; i < prev_.size(); ++i){
+    for (size_t j = 0; j < prev_[0].size(); ++j){      
       DrawCell(i,j);
     }
   }
+  wrefresh(window_.get());
 }
 
 
@@ -56,8 +59,8 @@ bool Board::CellLiveOrDead(int dead_num, int live_num, bool status){
 }
 
 bool Board::GetCellNewStatus(int my_i, int my_j){
-  int r_sz = max_y_ + 1;
-  int c_sz = max_x_ + 1;
+  int r_sz = static_cast<int>(prev_.size());
+  int c_sz = static_cast<int>(prev_[0].size());
   int dead_num = 0;
   int live_num = 0;
   int neighs[8][2] = {{0,1},{0,-1},{1,0},{-1,0},{-1,-1},{1,1},{-1,1},{1,-1}};
@@ -78,32 +81,34 @@ void Board::Calculate(){
 #ifdef LOGGER
   LOG(INFO)<<"Calculate Next Evolution...";
 #endif
-  for (int i = 0; i <= max_y_; ++i){
-    for (int j = 0; j <= max_x_; ++j){
+  for (size_t i = 0; i < prev_.size(); ++i){
+    for (size_t j = 0; j < prev_[0].size(); ++j){
       now_[i][j] = GetCellNewStatus(i,j);
     }
   }
 }
 
 void Board::Update(){
-  for (int i = 0; i <= max_y_; ++i){
-    for (int j = 0; j <= max_x_; ++j){
+  for (size_t i = 0; i < prev_.size(); ++i){
+    for (size_t j = 0; j < prev_[0].size(); ++j){
       prev_[i][j] = now_[i][j];
       DrawCell(i,j);
     }
   }
-  refresh();
+  wrefresh(window_.get());
 }
 
 void Board::SetEnv(){
   initscr();
   curs_set(0);
-  getmaxyx(stdscr,max_y_,max_x_);
+  window_ = std::unique_ptr<WINDOW, decltype(&delwin)>(newwin(LINES - 2, COLS - 4, 1,2),&delwin);
+  getbegyx(window_.get(),min_y_,min_x_);
   if (has_colors() == FALSE){
     throw NoColor();
   }
   cbreak();
   keypad(stdscr,TRUE);
+  keypad(window_.get(),TRUE);
   noecho();
   refresh();
   mousemask(BUTTON1_CLICKED,NULL);
@@ -112,6 +117,7 @@ void Board::SetEnv(){
 
 void Board::GoToMenu(){
   clear();
+  wclear(window_.get());
   menu_.Show();
   while(true){
     menu_.UserInteract();
@@ -119,14 +125,18 @@ void Board::GoToMenu(){
 }
 
 void Board::ManualConfig(){
+  int real_y, real_x;
   while(true){
     int ch = getch();
     switch(ch){
     case KEY_MOUSE:
       if(getmouse(&event_) == OK && (event_.bstate & BUTTON1_CLICKED)){
-	prev_[event_.y][event_.x] = !prev_[event_.y][event_.x];
-	DrawCell(event_.y,event_.x);
-	refresh();
+	real_y = event_.y - min_y_ - 1; //vector is from 0 to k
+	real_x = event_.x - min_x_ - 1; //but it should correspond to 1 to k + 1 in coordinate 
+	if (real_y < 0 || real_x < 0) break;
+	prev_[real_y][real_x] = !prev_[real_y][real_x];
+	DrawCell(real_y, real_x);
+	wrefresh(window_.get());
       }
       break;
     case 10:
@@ -143,10 +153,9 @@ void Board::ManualConfig(){
 
 
 void Board::Pause(){
-  timeout(-1);
   int ch;
   while(true){
-    ch = getch();
+    ch = wgetch(window_.get());
     switch(ch){
     case 'p':
       return;
@@ -162,14 +171,14 @@ void Board::Pause(){
 
 void Board::PollInput(){
   int ch;
-  ch = getch();
+  ch = wgetch(window_.get());
   switch(ch){
   case 'p':
+    nocbreak();
     Pause();
-    timeout(0);
     break;
   case 'b':
-    timeout(-1);
+    nocbreak();
     throw GoMenu();
   case 'q':
     throw Quit();
@@ -178,15 +187,15 @@ void Board::PollInput(){
   }
 }
 void Board::ContSim(){
-  timeout(0);
+  //wtimeout(window_.get(),0);
   while(true){
     Calculate();
     Update();
-    sleep(0.5);
-    PollInput();
+    halfdelay(1);
+    PollInput();    
   }
 }
-
+ 
 void Board::OnEvent(bool manual){
   InitCells(manual);
   if (manual){
@@ -199,10 +208,15 @@ void Board::GoToSim(bool manual){
   if (restart_){
     restart_ = false;
     menu_.Hide();
-    InitColor();
+    //InitColor();
     clear();
+    wclear(window_.get());
+    wrefresh(window_.get());
     refresh();
   }
+  box(window_.get(),0,0);
+  wrefresh(window_.get());
+  refresh();
   OnEvent(manual);  
 }
 
