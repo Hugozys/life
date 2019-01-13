@@ -19,9 +19,8 @@ int main(int argc, char ** argv){
     std::cout<<e.what();
     return (EXIT_SUCCESS);
   }
-  
-  Board bd;
   try{
+    Board bd;
     bd.SetEnv();
     bd.Run();
   }
