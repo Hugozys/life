@@ -100,6 +100,7 @@ void Board::Update(){
 
 void Board::SetEnv(){
   initscr();
+  menu_.InitMenu();
   curs_set(0);
   window_ = std::unique_ptr<WINDOW, decltype(&delwin)>(newwin(LINES - 2, COLS - 4, 1,2),&delwin);
   getbegyx(window_.get(),min_y_,min_x_);
