@@ -105,7 +105,7 @@ void Board::SetEnv(){
   window_ = std::unique_ptr<WINDOW, decltype(&delwin)>(newwin(LINES - 2, COLS - 4, 1,2),&delwin);
   getbegyx(window_.get(),min_y_,min_x_);
   if (has_colors() == FALSE){
-    throw NoColor();
+    // throw NoColor();
   }
   cbreak();
   keypad(stdscr,TRUE);

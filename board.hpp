@@ -32,9 +32,7 @@ public:
   
 public:
   Board():restart_(true),cur_stat_(MENU),window_(nullptr, &delwin){}
-  ~Board(){
-    endwin();
-  }
+  ~Board(){endwin();}
   void Run();
   
 private:

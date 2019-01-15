@@ -40,6 +40,7 @@ void Menu::UserInteract(){
     break;
   case 10:
     {
+      Hide();
       ITEM * curr = current_item(menu_.get());
       if (curr == p_chs_[0]){
 	throw Random();
